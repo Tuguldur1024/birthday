@@ -72,17 +72,6 @@ const Home = () => {
     }
   }, []);
 
-  // Define the 7 steps
-  const steps = [
-    { id: "first", label: "First Date" },
-    { id: "second", label: "Our Anniversary" },
-    { id: "third", label: "Christmas Together" },
-    { id: "fourth", label: "First Trip Together" },
-    { id: "fifth", label: "Graduation Celebration" },
-    { id: "sixth", label: "Engagement" },
-    { id: "seventh", label: "Wedding Day" },
-  ];
-
   // Function to handle button click
   const handleStepClick = (stepId: string) => {
     if (!visitedSteps.includes(stepId)) {

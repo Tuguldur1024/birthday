@@ -19,23 +19,26 @@ const StepContainer = styled.div`
   align-items: center;
 `;
 
-const StepButton = styled.button<{ visited: boolean }>`
-  background-color: ${({ visited }) => (visited ? "#ff6f61" : "#ffad99")};
-  color: ${({ visited }) => (visited ? "white" : "#ff6f61")};
+const StepButton = styled.button<{ visited: boolean; locked: boolean }>`
+  background-color: ${({ visited, locked }) =>
+    visited ? "#ff6f61" : locked ? "#d3d3d3" : "#ffad99"};
+  color: ${({ visited, locked }) =>
+    visited ? "white" : locked ? "#888" : "#ff6f61"};
   width: 70px;
   height: 70px;
   border-radius: 50%;
   font-size: 1.5rem;
   font-family: "Cursive", sans-serif;
   border: none;
-  cursor: pointer;
+  cursor: ${({ locked }) => (locked ? "not-allowed" : "pointer")};
   transition: background-color 0.3s, color 0.3s;
   display: flex;
   align-items: center;
   justify-content: center;
 
   &:hover {
-    background-color: ${({ visited }) => (visited ? "#ff8a7a" : "#ff7a5c")};
+    background-color: ${({ visited, locked }) =>
+      locked ? "#d3d3d3" : visited ? "#ff8a7a" : "#ff7a5c"};
   }
 
   &:focus {
@@ -69,38 +72,102 @@ const Home = () => {
     }
   }, []);
 
-  // Array of date steps
-  const steps = [
-    { date: "2023-06-01", label: "First Date" },
-    { date: "2023-08-15", label: "Our Anniversary" },
-    { date: "2023-12-25", label: "Christmas Together" },
-  ];
-
   // Function to handle button click
-  const handleStepClick = (date: string) => {
-    if (!visitedSteps.includes(date)) {
-      const updatedVisited = [...visitedSteps, date];
+  const handleStepClick = (stepId: string) => {
+    if (!visitedSteps.includes(stepId)) {
+      const updatedVisited = [...visitedSteps, stepId];
       setVisitedSteps(updatedVisited);
       localStorage.setItem("visitedSteps", JSON.stringify(updatedVisited));
     }
-    router.push(`/date/${date}`);
+    router.push(`/date/${stepId}`);
   };
 
   return (
     <div>
       <Title>Special Dates With You ❤️</Title>
       <StepList>
-        {steps.map((step, index) => (
-          <StepContainer key={step.date}>
-            <StepButton
-              visited={visitedSteps.includes(step.date)}
-              onClick={() => handleStepClick(step.date)}
-            >
-              {index + 1}
-            </StepButton>
-            {index < steps.length - 1 && <ArrowDown>↓</ArrowDown>}
-          </StepContainer>
-        ))}
+        {/* Step 1 */}
+        <StepContainer>
+          <StepButton
+            visited={visitedSteps.includes("first")}
+            locked={false}
+            onClick={() => handleStepClick("first")}
+          >
+            1
+          </StepButton>
+          <ArrowDown>↓</ArrowDown>
+        </StepContainer>
+
+        {/* Step 2 */}
+        <StepContainer>
+          <StepButton
+            visited={visitedSteps.includes("second")}
+            locked={visitedSteps.length < 1}
+            onClick={() => handleStepClick("second")}
+          >
+            {visitedSteps.includes("second") ? "2" : "🔒"}
+          </StepButton>
+          <ArrowDown>↓</ArrowDown>
+        </StepContainer>
+
+        {/* Step 3 */}
+        <StepContainer>
+          <StepButton
+            visited={visitedSteps.includes("third")}
+            locked={visitedSteps.length < 2}
+            onClick={() => handleStepClick("third")}
+          >
+            {visitedSteps.includes("third") ? "3" : "🔒"}
+          </StepButton>
+          <ArrowDown>↓</ArrowDown>
+        </StepContainer>
+
+        {/* Step 4 */}
+        <StepContainer>
+          <StepButton
+            visited={visitedSteps.includes("fourth")}
+            locked={visitedSteps.length < 3}
+            onClick={() => handleStepClick("fourth")}
+          >
+            {visitedSteps.includes("fourth") ? "4" : "🔒"}
+          </StepButton>
+          <ArrowDown>↓</ArrowDown>
+        </StepContainer>
+
+        {/* Step 5 */}
+        <StepContainer>
+          <StepButton
+            visited={visitedSteps.includes("fifth")}
+            locked={visitedSteps.length < 4}
+            onClick={() => handleStepClick("fifth")}
+          >
+            {visitedSteps.includes("fifth") ? "5" : "🔒"}
+          </StepButton>
+          <ArrowDown>↓</ArrowDown>
+        </StepContainer>
+
+        {/* Step 6 */}
+        <StepContainer>
+          <StepButton
+            visited={visitedSteps.includes("sixth")}
+            locked={visitedSteps.length < 5}
+            onClick={() => handleStepClick("sixth")}
+          >
+            {visitedSteps.includes("sixth") ? "6" : "🔒"}
+          </StepButton>
+          <ArrowDown>↓</ArrowDown>
+        </StepContainer>
+
+        {/* Step 7 */}
+        <StepContainer>
+          <StepButton
+            visited={visitedSteps.includes("seventh")}
+            locked={visitedSteps.length < 6}
+            onClick={() => handleStepClick("seventh")}
+          >
+            {visitedSteps.includes("seventh") ? "7" : "🔒"}
+          </StepButton>
+        </StepContainer>
       </StepList>
     </div>
   );

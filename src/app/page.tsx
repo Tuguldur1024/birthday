@@ -103,7 +103,7 @@ export default function Home() {
       setShowMessage(true);
       setTimeout(() => {
         setShowNextButton(true);
-      }, 2000);
+      }, 1000);
     } else {
       alert("On to the next step!");
     }

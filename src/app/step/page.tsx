@@ -72,6 +72,17 @@ const Home = () => {
     }
   }, []);
 
+  // Define the 7 steps
+  const steps = [
+    { id: "first", label: "First Date" },
+    { id: "second", label: "Our Anniversary" },
+    { id: "third", label: "Christmas Together" },
+    { id: "fourth", label: "First Trip Together" },
+    { id: "fifth", label: "Graduation Celebration" },
+    { id: "sixth", label: "Engagement" },
+    { id: "seventh", label: "Wedding Day" },
+  ];
+
   // Function to handle button click
   const handleStepClick = (stepId: string) => {
     if (!visitedSteps.includes(stepId)) {
@@ -93,7 +104,7 @@ const Home = () => {
             locked={false}
             onClick={() => handleStepClick("first")}
           >
-            1
+            {visitedSteps.includes("first") ? 1 : "🔒"}
           </StepButton>
           <ArrowDown>↓</ArrowDown>
         </StepContainer>
@@ -105,7 +116,7 @@ const Home = () => {
             locked={visitedSteps.length < 1}
             onClick={() => handleStepClick("second")}
           >
-            {visitedSteps.includes("second") ? "2" : "🔒"}
+            {visitedSteps.includes("second") ? 2 : "🔒"}
           </StepButton>
           <ArrowDown>↓</ArrowDown>
         </StepContainer>
@@ -117,7 +128,7 @@ const Home = () => {
             locked={visitedSteps.length < 2}
             onClick={() => handleStepClick("third")}
           >
-            {visitedSteps.includes("third") ? "3" : "🔒"}
+            {visitedSteps.includes("third") ? 3 : "🔒"}
           </StepButton>
           <ArrowDown>↓</ArrowDown>
         </StepContainer>
@@ -129,7 +140,7 @@ const Home = () => {
             locked={visitedSteps.length < 3}
             onClick={() => handleStepClick("fourth")}
           >
-            {visitedSteps.includes("fourth") ? "4" : "🔒"}
+            {visitedSteps.includes("fourth") ? 4 : "🔒"}
           </StepButton>
           <ArrowDown>↓</ArrowDown>
         </StepContainer>
@@ -141,7 +152,7 @@ const Home = () => {
             locked={visitedSteps.length < 4}
             onClick={() => handleStepClick("fifth")}
           >
-            {visitedSteps.includes("fifth") ? "5" : "🔒"}
+            {visitedSteps.includes("fifth") ? 5 : "🔒"}
           </StepButton>
           <ArrowDown>↓</ArrowDown>
         </StepContainer>
@@ -153,7 +164,7 @@ const Home = () => {
             locked={visitedSteps.length < 5}
             onClick={() => handleStepClick("sixth")}
           >
-            {visitedSteps.includes("sixth") ? "6" : "🔒"}
+            {visitedSteps.includes("sixth") ? 6 : "🔒"}
           </StepButton>
           <ArrowDown>↓</ArrowDown>
         </StepContainer>
@@ -165,7 +176,7 @@ const Home = () => {
             locked={visitedSteps.length < 6}
             onClick={() => handleStepClick("seventh")}
           >
-            {visitedSteps.includes("seventh") ? "7" : "🔒"}
+            {visitedSteps.includes("seventh") ? 7 : "🔒"}
           </StepButton>
         </StepContainer>
       </StepList>

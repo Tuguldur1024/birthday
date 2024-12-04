@@ -1,16 +1,32 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+
+const Title = styled.h1`
+  text-align: center;
+  font-size: 3rem;
+  margin-bottom: 50px;
+  font-family: "Cursive", sans-serif;
+`;
+
+const DateInfo = styled.p`
+  text-align: center;
+  font-size: 1.2rem;
+  font-family: "Arial", sans-serif;
+`;
 
 const DatePage = () => {
-  // Using useParams to get the dynamic params
-  const { date } = useParams();
+  // Get the dynamic date parameter from the URL using useParams()
+  const { date } = useParams<{ date: string }>(); // Explicitly define the type here
 
   const [dateInfo, setDateInfo] = useState<string | null>(null);
 
   useEffect(() => {
+    // Check that `date` is a valid string and is not undefined
+    if (!date || typeof date !== "string") return;
+
     const dateDetails: { [key: string]: string } = {
       "2023-06-01":
         "This was our first date! We went to the park and had a lovely picnic.",
@@ -20,13 +36,14 @@ const DatePage = () => {
         "Christmas together was magical! We exchanged gifts and spent quality time with each other.",
     };
 
+    // Ensure `date` is a valid key for dateDetails
     setDateInfo(dateDetails[date] || "Details for this date are coming soon!");
   }, [date]);
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1>{`Special Date: ${date}`}</h1>
-      <p>{dateInfo}</p>
+      <Title>{`Special Date: ${date}`}</Title>
+      <DateInfo>{dateInfo}</DateInfo>
     </div>
   );
 };

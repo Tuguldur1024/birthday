@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 

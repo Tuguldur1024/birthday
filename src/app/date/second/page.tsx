@@ -18,11 +18,6 @@ const bounce = keyframes`
   100% { transform: scale(1); }
 `;
 
-const fadeIn = keyframes`
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-`;
-
 const glowText = keyframes`
   0% {
     text-shadow: 0 0 10px rgba(255, 105, 180, 0.8), 0 0 20px rgba(255, 105, 180, 0.6);
@@ -244,7 +239,6 @@ const HomeSecond = () => {
               transition={{ duration: 1, ease: "easeInOut" }}
             />
           </ImageContainer>
-
           <YouLookBeautiful
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

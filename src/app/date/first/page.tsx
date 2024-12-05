@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+// Animations
 const backgroundAnimation = keyframes`
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -16,6 +17,7 @@ const floatUp = keyframes`
   100% { transform: translateY(-200px) scale(0.5); opacity: 0; }
 `;
 
+// Styled Components
 const LoveEmojiContainer = styled.div`
   position: absolute;
   top: 0;
@@ -32,17 +34,6 @@ const LoveEmoji = styled.div`
   font-size: 2.5rem;
   will-change: transform;
 `;
-
-const getRandomEmoji = () => {
-  const emojis = ["💖", "💘", "💕", "❤️", "💗", "💓"];
-  return emojis[Math.floor(Math.random() * emojis.length)];
-};
-
-const generateRandomPosition = () => ({
-  top: `${Math.random() * 100}%`,
-  left: `${Math.random() * 100}%`,
-  animationDelay: `${Math.random() * 2}s`,
-});
 
 const Container = styled.div`
   display: flex;
@@ -142,6 +133,24 @@ const NextButton = styled(motion.button)`
   }
 `;
 
+// Love Emoji Position Type
+interface LoveEmojiPosition {
+  top: string;
+  left: string;
+  animationDelay: string;
+}
+
+const getRandomEmoji = () => {
+  const emojis = ["💖", "💘", "💕", "❤️", "💗", "💓"];
+  return emojis[Math.floor(Math.random() * emojis.length)];
+};
+
+const generateRandomPosition = (): LoveEmojiPosition => ({
+  top: `${Math.random() * 100}%`,
+  left: `${Math.random() * 100}%`,
+  animationDelay: `${Math.random() * 2}s`,
+});
+
 const Home = () => {
   const date = "2022-01-18";
   const message =
@@ -152,7 +161,7 @@ const Home = () => {
   const [showImage, setShowImage] = useState(false);
   const [showTextExplanation, setShowTextExplanation] = useState(false);
   const [fadeOutText, setFadeOutText] = useState(false);
-  const [loveEmojis, setLoveEmojis] = useState<any[]>([]);
+  const [loveEmojis, setLoveEmojis] = useState<LoveEmojiPosition[]>([]);
 
   const router = useRouter();
 

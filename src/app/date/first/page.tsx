@@ -3,19 +3,51 @@
 import styled, { keyframes } from "styled-components";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import Confetti from "react-confetti"; // Import the Confetti library
+import { useRouter } from "next/navigation";
 
-// Background Animation
 const backgroundAnimation = keyframes`
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 `;
 
+const floatUp = keyframes`
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-200px) scale(0.5); opacity: 0; }
+`;
+
+const LoveEmojiContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+`;
+
+const LoveEmoji = styled.div`
+  position: absolute;
+  animation: ${floatUp} 4s ease-out forwards;
+  font-size: 2.5rem;
+  will-change: transform;
+`;
+
+const getRandomEmoji = () => {
+  const emojis = ["💖", "💘", "💕", "❤️", "💗", "💓"];
+  return emojis[Math.floor(Math.random() * emojis.length)];
+};
+
+const generateRandomPosition = () => ({
+  top: `${Math.random() * 100}%`,
+  left: `${Math.random() * 100}%`,
+  animationDelay: `${Math.random() * 2}s`,
+});
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Align items to the top */
+  justify-content: flex-start;
   align-items: center;
   height: 100vh;
   background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb, #8fd3f4);
@@ -23,8 +55,8 @@ const Container = styled.div`
   animation: ${backgroundAnimation} 10s ease infinite;
   font-family: "Cursive", sans-serif;
   color: #ff6f61;
-  padding-top: 50px; /* Space from the top */
-  padding: 20px; /* Added padding to the container */
+  padding: 20px;
+  padding-top: 50px;
   overflow: hidden;
 `;
 
@@ -75,7 +107,6 @@ const Heart = styled(motion.div)`
   animation: pulse 2s infinite ease-in-out;
 `;
 
-// Properly typed ImageContainer component to accept 'show' prop without errors
 interface ImageContainerProps {
   show: boolean;
 }
@@ -84,8 +115,7 @@ const ImageContainer = styled.div<ImageContainerProps>`
   margin-top: 30px;
   text-align: center;
   max-width: 80%;
-  display: ${(props) =>
-    props.show ? "block" : "none"}; // Show or hide based on 'show' prop
+  display: ${(props) => (props.show ? "block" : "none")};
 `;
 
 const TextExplanation = styled(motion.div)`
@@ -96,7 +126,7 @@ const TextExplanation = styled(motion.div)`
   max-width: 600px;
 `;
 
-const NextButton = styled.button`
+const NextButton = styled(motion.button)`
   margin-top: 20px;
   padding: 10px 20px;
   background-color: #ff6f61;
@@ -115,14 +145,31 @@ const NextButton = styled.button`
 const Home = () => {
   const date = "2022-01-18";
   const message =
-    "On this day, we met for the first time and talked about school and life.";
+    "Энэ өдөр чамтай хамгийн анх удаа уулзаж байсан. Танилцаад удчихсан хүмүүс шиг л удаан ярьж билээ. Зөндөө таалагдсан";
 
   const [typedMessage, setTypedMessage] = useState("");
   const [showMessageBox, setShowMessageBox] = useState(false);
   const [showImage, setShowImage] = useState(false);
   const [showTextExplanation, setShowTextExplanation] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false);
   const [fadeOutText, setFadeOutText] = useState(false);
+  const [loveEmojis, setLoveEmojis] = useState<any[]>([]);
+
+  const router = useRouter();
+
+  const handleNext = () => {
+    setFadeOutText(true);
+    setTimeout(() => {
+      const visitedSteps = JSON.parse(
+        localStorage.getItem("visitedSteps") || "[]"
+      );
+
+      if (!visitedSteps.includes("step-0")) {
+        visitedSteps.push("step-0");
+        localStorage.setItem("visitedSteps", JSON.stringify(visitedSteps));
+      }
+      router.push("/step");
+    }, 1000);
+  };
 
   useEffect(() => {
     let currentIndex = 0;
@@ -135,13 +182,17 @@ const Home = () => {
       } else {
         clearInterval(messageTyping);
         setTimeout(() => {
-          setFadeOutText(true); // Trigger text fade-out after typing is complete
-          setShowImage(true); // Show the image
-          setShowTextExplanation(true); // Show the explanation text
-          setShowConfetti(true); // Trigger confetti after typing is complete
-        }, 3000); // Wait for 3 seconds before transitioning
+          setFadeOutText(true);
+          setShowImage(true);
+          setShowTextExplanation(true);
+
+          const emojiArray = Array.from({ length: 20 }, () =>
+            generateRandomPosition()
+          );
+          setLoveEmojis(emojiArray);
+        }, 3000);
       }
-    }, 100); // Typing speed
+    }, 100);
 
     return () => clearInterval(messageTyping);
   }, [message]);
@@ -153,7 +204,21 @@ const Home = () => {
 
   return (
     <Container>
-      {/* Display the date with animation */}
+      <LoveEmojiContainer>
+        {loveEmojis.map((pos, index) => (
+          <LoveEmoji
+            key={index}
+            style={{
+              top: pos.top,
+              left: pos.left,
+              animationDelay: pos.animationDelay,
+            }}
+          >
+            {getRandomEmoji()}
+          </LoveEmoji>
+        ))}
+      </LoveEmojiContainer>
+
       <DateContainer
         initial={{ scale: 0, opacity: 0, y: -50 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -162,10 +227,6 @@ const Home = () => {
         {date}
       </DateContainer>
 
-      {/* Confetti effect */}
-      {showConfetti && <Confetti />}
-
-      {/* Show the message box with typing animation */}
       {showMessageBox && !fadeOutText && (
         <EventContainer
           initial={{ opacity: 0, y: 50 }}
@@ -177,20 +238,18 @@ const Home = () => {
         </EventContainer>
       )}
 
-      {/* Wait for 3 seconds, then fade out the message and show the image */}
       {fadeOutText && (
         <EventContainer
           initial={{ opacity: 1 }}
           animate={{ opacity: 0 }}
           transition={{ duration: 1 }}
-          style={{ display: "none" }} // This hides the faded text completely after it fades out
+          style={{ display: "none" }}
         >
           <Heart>❤️</Heart>
           <TypingText>{typedMessage}</TypingText>
         </EventContainer>
       )}
 
-      {/* Show the image related to the event */}
       <ImageContainer show={showImage}>
         <img
           src="/zurag1.jpg"
@@ -204,23 +263,23 @@ const Home = () => {
         />
       </ImageContainer>
 
-      {/* Show the explanation text with animation */}
       {showTextExplanation && (
         <TextExplanation
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: "easeOut" }}
         >
-          This was the first photo I saw of her. It was a beautiful moment.
+          Хамгийн анх энэ зурагнаас чамайг олж хараад царайлаг охин байсан байна
+          даа гэж дараа нь бодсон
         </TextExplanation>
       )}
 
-      {/* Next button */}
       {showImage && (
         <NextButton
-          onClick={() => {
-            alert("Proceeding to the next step!");
-          }}
+          initial={{ scale: 1 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={handleNext}
         >
           Proceed to Next Step
         </NextButton>

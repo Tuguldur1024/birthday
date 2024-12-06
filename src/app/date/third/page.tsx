@@ -3,6 +3,7 @@
 import styled, { keyframes } from "styled-components";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 // Animation for background gradient
 const backgroundAnimation = keyframes`
@@ -144,12 +145,12 @@ const TypingText = styled(motion.div)<{ textLength: number }>`
   font-size: 2.2rem;
   font-weight: bold;
   color: #2f3640;
-  white-space: normal; /* Allow text to wrap */
-  word-wrap: break-word; /* Break the word if necessary */
+  white-space: normal;
+  word-wrap: break-word;
   overflow: hidden;
   border-right: 3px solid #2f3640;
-  width: auto; /* Allow width to grow based on content */
-  min-width: 100%; /* To maintain the container size at least for one line */
+  width: auto;
+  min-width: 100%;
   animation: ${typing} ${({ textLength }) => textLength * 0.1}s
       steps(${({ textLength }) => textLength}, end),
     blink 0.5s step-end infinite;
@@ -170,14 +171,39 @@ const ImageContainer = styled(motion.div)`
   max-width: 80%;
 `;
 
+const NextButton = styled.button<{ show: boolean }>`
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #ff6f61;
+  color: white;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  opacity: ${({ show }) => (show ? 1 : 0)};
+  visibility: ${({ show }) => (show ? "visible" : "hidden")};
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+
+  &:hover {
+    background-color: #ff3b2f;
+  }
+`;
+
 const HomeThird = () => {
   const [isRevealed, setIsRevealed] = useState(false);
+  const [showNextButton, setShowNextButton] = useState(false);
+  const router = useRouter();
 
   const handleClick = () => {
     setIsRevealed(true);
+    setTimeout(() => setShowNextButton(true), 2000); // 2 seconds delay for button visibility
   };
 
   const message = "She asked me out, and I said YES!";
+
+  const handleNextMemory = () => {
+    router.push("/step"); // Navigate to next page (update URL as needed)
+  };
 
   return (
     <Container>
@@ -247,6 +273,10 @@ const HomeThird = () => {
           </ImageContainer>
         </>
       )}
+
+      <NextButton show={showNextButton} onClick={handleNextMemory}>
+        Next Memory
+      </NextButton>
     </Container>
   );
 };

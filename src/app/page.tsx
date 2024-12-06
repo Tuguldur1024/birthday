@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
+// Main Section Style
 const HeroSection = styled.div`
   display: flex;
   flex-direction: column;
@@ -25,6 +26,7 @@ const HeroSection = styled.div`
   }
 `;
 
+// Title Style
 const Title = styled.h1`
   font-size: 3rem;
   font-family: "Cursive", sans-serif;
@@ -39,6 +41,7 @@ const Title = styled.h1`
   }
 `;
 
+// Button Style
 const Button = styled(motion.button)`
   margin-top: 2rem;
   padding: 15px 25px;
@@ -67,6 +70,7 @@ const Button = styled(motion.button)`
   }
 `;
 
+// Heart Style
 const Heart = styled.div`
   margin-top: 2rem;
   font-size: 2rem;
@@ -93,10 +97,49 @@ const Heart = styled.div`
   }
 `;
 
+// Password Input Style
+const PasswordInput = styled.input`
+  margin-top: 2rem;
+  padding: 10px;
+  font-size: 1rem;
+  font-family: "Cursive", sans-serif;
+  border: 2px solid #ff6f61;
+  border-radius: 5px;
+  text-align: center;
+  background-color: #333; /* Black background */
+  color: white; /* White text */
+
+  &:focus {
+    outline: none;
+    border-color: #ff8a7a;
+  }
+
+  @media (max-width: 768px) {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 6px;
+    font-size: 0.8rem;
+  }
+`;
+
+// Error Message Style
+const ErrorMessage = styled.div`
+  color: red;
+  font-size: 1rem;
+  margin-top: 1rem;
+`;
+
+// Main component
 export default function Home() {
   const router = useRouter();
   const [showMessage, setShowMessage] = useState(false);
   const [showNextButton, setShowNextButton] = useState(false);
+  const [password, setPassword] = useState("");
+  const [isPasswordCorrect, setIsPasswordCorrect] = useState(false);
+  const [passwordSubmitted, setPasswordSubmitted] = useState(false); // New state to track password submission
 
   const handleClick = () => {
     if (!showMessage) {
@@ -108,14 +151,47 @@ export default function Home() {
       alert("On to the next step!");
     }
   };
+
   const handleClickNext = () => {
     router.push("/step");
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
+  const handlePasswordSubmit = () => {
+    setPasswordSubmitted(true); // Mark password as submitted
+    if (password === "Jagaanaa") {
+      setIsPasswordCorrect(true);
+    } else {
+      setIsPasswordCorrect(false);
+    }
   };
 
   return (
     <HeroSection>
       <Title>Welcome to a Special Day! 🎉</Title>
-      {!showMessage ? (
+
+      {/* Password Section */}
+      {!isPasswordCorrect && (
+        <div>
+          <PasswordInput
+            type="password"
+            placeholder="Enter Password"
+            value={password}
+            onChange={handlePasswordChange}
+          />
+          <Button onClick={handlePasswordSubmit}>Submit</Button>
+          {/* Show error only after submit */}
+          {passwordSubmitted && !isPasswordCorrect && password && (
+            <ErrorMessage>Incorrect password. Try again!</ErrorMessage>
+          )}
+        </div>
+      )}
+
+      {/* Only show the message and button after the password is correct */}
+      {isPasswordCorrect && !showMessage && (
         <Button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -123,7 +199,9 @@ export default function Home() {
         >
           Click to Reveal
         </Button>
-      ) : (
+      )}
+
+      {showMessage && (
         <div
           style={{
             display: "flex",
@@ -132,7 +210,7 @@ export default function Home() {
             gap: "1rem",
           }}
         >
-          <Heart>❤️ Love You ❤️</Heart>
+          <Heart>❤️I Love You So Much❤️</Heart>
           {showNextButton && (
             <Button
               whileHover={{ scale: 1.1 }}

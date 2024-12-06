@@ -3,6 +3,7 @@
 import styled, { keyframes } from "styled-components";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useRouter } from "next/navigation"; // Import router for navigation
 
 // Animation for background gradient
 const backgroundAnimation = keyframes`
@@ -48,7 +49,7 @@ const Container = styled.div`
 const DateContainer = styled(motion.div)`
   font-size: 4rem;
   font-weight: bold;
-  color: white;
+  color: #333333; /* Change text color */
   text-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   margin-bottom: 20px;
   text-align: center;
@@ -149,7 +150,6 @@ const GlowingEffect = styled(motion.div)`
   animation: pulse 2s infinite ease-in-out;
 `;
 
-// Add typing for props in ImageContainer
 interface ImageContainerProps {
   show: boolean;
 }
@@ -169,17 +169,52 @@ const YouLookBeautiful = styled(motion.div)`
   animation: ${glowText} 2s ease-in-out infinite;
 `;
 
+// Define the props for the NextButton styled component
+interface NextButtonProps {
+  show: boolean;
+}
+
+const NextButton = styled.button<NextButtonProps>`
+  background-color: #ff6f61;
+  color: white;
+  font-size: 1.5rem;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 30px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  opacity: ${(props) => (props.show ? 1 : 0)};
+  visibility: ${(props) => (props.show ? "visible" : "hidden")};
+  pointer-events: ${(props) => (props.show ? "auto" : "none")};
+
+  &:hover {
+    background-color: #ff9a9e;
+    transform: scale(1.05);
+  }
+`;
+
 const HomeSecond = () => {
   const [isRevealed, setIsRevealed] = useState(false);
   const [showImageAndText, setShowImageAndText] = useState(false); // New state to control image and text visibility
+  const [showNextButton, setShowNextButton] = useState(false); // Control the visibility of the next button
+  const router = useRouter(); // Initialize router
 
   const handleClick = () => {
     setIsRevealed(true);
-    setTimeout(() => setShowImageAndText(true), 1500); // Delay image and text display after the message
+    setTimeout(() => {
+      setShowImageAndText(true);
+      setShowNextButton(true); // Show the next button after box is revealed
+    }, 1500); // Delay image and text display after the message
   };
 
   const message =
-    "Бид энэ өдөр өөрсдийгөө нэг нэгэндээ анх удаа танилцуулж билээ.";
+    "We introduced ourselves, I apologize for being little ignorant 🥹";
+
+  const handleNextMemory = () => {
+    router.push("/step"); // Navigate to /step when the button is clicked
+  };
 
   return (
     <Container>
@@ -226,7 +261,7 @@ const HomeSecond = () => {
         <>
           <ImageContainer show={true}>
             <motion.img
-              src="/zurag1.jpg"
+              src="/zurag2.jpg"
               alt="First Meeting"
               style={{
                 width: "100%",
@@ -248,6 +283,11 @@ const HomeSecond = () => {
           </YouLookBeautiful>
         </>
       )}
+
+      {/* Next Memory Button */}
+      <NextButton show={showNextButton} onClick={handleNextMemory}>
+        Next Memory
+      </NextButton>
     </Container>
   );
 };

@@ -154,7 +154,7 @@ const generateRandomPosition = (): LoveEmojiPosition => ({
 const Home = () => {
   const date = "2022-01-18";
   const message =
-    "Энэ өдөр чамтай хамгийн анх удаа уулзаж байсан. Танилцаад удчихсан хүмүүс шиг л удаан ярьж билээ. Зөндөө таалагдсан";
+    "This was the first day we met, yet it felt like we had known each other for years. I knew I liked you from that moment.";
 
   const [typedMessage, setTypedMessage] = useState("");
   const [showMessageBox, setShowMessageBox] = useState(false);
@@ -278,8 +278,8 @@ const Home = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: "easeOut" }}
         >
-          Хамгийн анх энэ зурагнаас чамайг олж хараад царайлаг охин байсан байна
-          даа гэж дараа нь бодсон
+          As soon as we met, I came across your photo and could not help but
+          think Wow, she is beautiful
         </TextExplanation>
       )}
 
@@ -290,7 +290,7 @@ const Home = () => {
           whileTap={{ scale: 0.9 }}
           onClick={handleNext}
         >
-          Proceed to Next Step
+          Next Memory ➡️
         </NextButton>
       )}
     </Container>
